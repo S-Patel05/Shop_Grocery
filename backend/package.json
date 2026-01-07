@@ -10,9 +10,10 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "type":"module",
+  "type": "module",
   "dependencies": {
     "dotenv": "^17.2.3",
+    "e-commerce-website": "file:..",
     "express": "^5.2.1"
   }
 }
