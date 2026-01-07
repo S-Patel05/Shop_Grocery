@@ -1,21 +1,24 @@
 import express from "express";
 import path from "path";
-import { ENV } from "./config/env.js"
+import { ENV } from "./config/env.js";
 
 const app = express();
-
 const __dirname = path.resolve();
 
-app.get("/api/health", (req,res) => {
-    res.status(200).json({ message: "sucess"});
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ message: "success" });
 });
 
-if(ENV.NODE_ENV === "production"){
-    app.use(express.static(path.join(__dirname, "../admin/dist")))
+if (ENV.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../admin/dist")));
 
-    app.get("*", (req,res) => {
-        res.sendFile(path.join(__dirname, "../admin/dist/index.html"))
-    })
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "../admin/dist/index.html"));
+  });
 }
 
-app.listen(ENV.PORT, () => console.log("Server is up and running"));
+const PORT = ENV.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is up and running on port ${PORT}`);
+});
