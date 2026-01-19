@@ -132,8 +132,9 @@ function ProductsPage() {
 
       {/* PRODUCTS GRID */}
       <div className="grid grid-cols-1 gap-4">
-        {products?.map((product) => {
-          const status = getStockStatusBadge(product.stock);
+        {Array.isArray(products) &&
+          products.map((product) => {
+            const status = getStockStatusBadge(product.stock);
 
           return (
             <div key={product._id} className="card bg-base-100 shadow-xl">
