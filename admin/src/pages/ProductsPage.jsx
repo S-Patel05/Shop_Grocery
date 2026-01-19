@@ -117,6 +117,7 @@ function ProductsPage() {
   };
 
   return (
+    
     <div className="space-y-6">
       {/* HEADER */}
       <div className="flex items-center justify-between">
@@ -132,8 +133,10 @@ function ProductsPage() {
 
       {/* PRODUCTS GRID */}
       <div className="grid grid-cols-1 gap-4">
-        {Array.isArray(products) &&
-          products.map((product) => {
+        {products?.map((product) => {
+          console.log(product);
+          const status = getStockStatusBadge(product.stock);
+
           return (
             <div key={product._id} className="card bg-base-100 shadow-xl">
               <div className="card-body">
@@ -155,7 +158,7 @@ function ProductsPage() {
                     <div className="flex items-center gap-6 mt-4">
                       <div>
                         <p className="text-xs text-base-content/70">Price</p>
-                        <p className="font-bold text-lg">₹{product.price}</p>
+                        <p className="font-bold text-lg">${product.price}</p>
                       </div>
                       <div>
                         <p className="text-xs text-base-content/70">Stock</p>
@@ -191,7 +194,7 @@ function ProductsPage() {
 
       {/* ADD/EDIT PRODUCT MODAL */}
 
-      <input type="checkbox" className="modal-toggle" checked={showModal} onChange={() => {}} />
+      <input type="checkbox" className="modal-toggle" checked={showModal} />
 
       <div className="modal">
         <div className="modal-box max-w-2xl">
@@ -237,7 +240,6 @@ function ProductsPage() {
                   <option value="Accessories">Accessories</option>
                   <option value="Fashion">Fashion</option>
                   <option value="Sports">Sports</option>
-                  <option value="Grocery">Grocery</option>
                 </select>
               </div>
             </div>
@@ -245,7 +247,7 @@ function ProductsPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="form-control">
                 <label className="label">
-                  <span>Price (₹)</span>
+                  <span>Price ($)</span>
                 </label>
                 <input
                   type="number"
@@ -354,6 +356,7 @@ function ProductsPage() {
       </div>
     </div>
   );
+
 }
 
 export default ProductsPage;
