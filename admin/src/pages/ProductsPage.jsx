@@ -132,9 +132,8 @@ function ProductsPage() {
 
       {/* PRODUCTS GRID */}
       <div className="grid grid-cols-1 gap-4">
-        {Array.isArray(products) &&
-          products.map((product) => {
-            const status = getStockStatusBadge(product.stock);
+        {products?.map((product) => {
+          const status = getStockStatusBadge(product.stock);
 
           return (
             <div key={product._id} className="card bg-base-100 shadow-xl">
@@ -193,7 +192,7 @@ function ProductsPage() {
 
       {/* ADD/EDIT PRODUCT MODAL */}
 
-      <input type="checkbox" className="modal-toggle" checked={showModal} />
+      <input type="checkbox" className="modal-toggle" checked={showModal} onChange={() => {}} />
 
       <div className="modal">
         <div className="modal-box max-w-2xl">
