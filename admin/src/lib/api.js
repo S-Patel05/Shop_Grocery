@@ -2,7 +2,7 @@ import axiosInstance from "./axios";
 
 export const productApi = {
   getAll: async () => {
-    const { data } = await axiosInstance.get("/admin/products");
+    const { data } = await axiosInstance.get("/products");
     return data;
   },
 
