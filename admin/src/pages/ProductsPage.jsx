@@ -25,6 +25,8 @@ function ProductsPage() {
     queryFn: productApi.getAll,
   });
 
+  console.log("PRODUCTS FROM QUERY:", products);
+
   // creating, update, deleting
   const createProductMutation = useMutation({
     mutationFn: productApi.create,
@@ -133,9 +135,9 @@ function ProductsPage() {
 
       {/* PRODUCTS GRID */}
       <div className="grid grid-cols-1 gap-4">
-        {Array.isArray(products) &&
-          products.map((product) => {
-            console.log(product);
+       {products?.map((product) => {
+          console.log(product);
+          const status = getStockStatusBadge(product.stock);
 
           return (
             <div key={product._id} className="card bg-base-100 shadow-xl">
