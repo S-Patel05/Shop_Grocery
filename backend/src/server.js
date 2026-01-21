@@ -34,7 +34,7 @@ const __dirname = path.resolve();
 //   },
 //   paymentRoutes
 // );
-
+app.set("trust proxy", 1);
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true })); // credentials: true allows the browser to send the cookies to the server with the request
 app.use(express.json());
 app.use(clerkMiddleware()); // adds auth object under the req => req.auth
@@ -56,8 +56,8 @@ app.get("/api/health", (req, res) => {
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../admin/dist")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../admin/dist/index.html"));
+  app.get("/{*any}", (req, res) => {
+    res.sendFile(path.join(__dirname, "../admin", "dist", "index.html"));
   });
 }
 

@@ -25,8 +25,6 @@ function ProductsPage() {
     queryFn: productApi.getAll,
   });
 
-  console.log("PRODUCTS FROM QUERY:", products);
-
   // creating, update, deleting
   const createProductMutation = useMutation({
     mutationFn: productApi.create,
@@ -119,7 +117,6 @@ function ProductsPage() {
   };
 
   return (
-    
     <div className="space-y-6">
       {/* HEADER */}
       <div className="flex items-center justify-between">
@@ -135,8 +132,7 @@ function ProductsPage() {
 
       {/* PRODUCTS GRID */}
       <div className="grid grid-cols-1 gap-4">
-       {products?.map((product) => {
-          console.log(product);
+        {products?.map((product) => {
           const status = getStockStatusBadge(product.stock);
 
           return (
@@ -358,7 +354,6 @@ function ProductsPage() {
       </div>
     </div>
   );
-
 }
 
 export default ProductsPage;
