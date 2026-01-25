@@ -7,11 +7,10 @@ import { tokenCache } from '@clerk/clerk-expo/token-cache';
 const queryClient = new QueryClient();
 export default function RootLayout() {
   return (
-    <ClerkProvider  tokenCache={tokenCache}>
+    <ClerkProvider tokenCache={tokenCache}>
       <QueryClientProvider client={queryClient}>
-        <Stack screenOptions={{ headerShown: false }}/>;
-
+        <Stack screenOptions={{ headerShown: false }} />
       </QueryClientProvider>
     </ClerkProvider>
-  )
+  );
 }
