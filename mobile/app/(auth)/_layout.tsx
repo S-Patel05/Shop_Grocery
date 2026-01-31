@@ -6,7 +6,7 @@ export default function AuthRoutesLayout() {
   if (!isLoaded) return null;
 
   if (isSignedIn) {
-    return <Redirect href={"/(tabs)/profile"} />;
+    return <Redirect href={"/(tabs)"} />;
 
   }
 

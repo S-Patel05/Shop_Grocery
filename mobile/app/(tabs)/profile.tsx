@@ -20,7 +20,7 @@ const  ProfileScreen = () => {
 
   const handleMenuPress = (action: (typeof MENU_ITEMS)[number]["action"]) => {
     if (action === "/profile") return;
-    //router.push(action);
+    router.push(action);
   };
   return (
     <SafeScreen>
@@ -84,7 +84,7 @@ const  ProfileScreen = () => {
           <TouchableOpacity
             className="flex-row items-center justify-between py-2"
             activeOpacity={0.7}
-            // onPress={() => router.push("/privacy-security")}
+            onPress={() => router.push("/privacy-security")}
           >
             <View className="flex-row items-center">
               <Ionicons name="shield-checkmark-outline" size={22} color="#FFFFFF" />
