@@ -54,7 +54,7 @@ function WishlistScreen() {
 
       {wishlist.length === 0 ? (
         <View className="flex-1 items-center justify-center px-6">
-          <Ionicons name="heart-outline" size={80} color="#edff87" />
+          <Ionicons name="heart-outline" size={80} color="#fced49" />
           <Text className="text-text-primary font-semibold text-xl mt-4">
             Your wishlist is empty
           </Text>
