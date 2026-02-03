@@ -69,6 +69,14 @@ const orderSchema = new mongoose.Schema(
       type: shippingAddressSchema,
       required: true,
     },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "failed", "refunded"],
+      default: "pending",
+    },
+    paidAt: {
+      type: Date,
+    },
     paymentResult: {
       id: String,
       status: String,

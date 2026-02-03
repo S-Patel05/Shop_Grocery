@@ -160,28 +160,24 @@ const CartScreen = () => {
 
       // Create order (NO payment intent)
       await api.post("/orders", {
-        items: cartItems.map((item) => ({
-          product: item.product._id,
-          quantity: item.quantity,
-          price: item.product.price,
-        })),
-        shippingAddress: {
-          fullName: selectedAddress.fullName,
-          streetAddress: selectedAddress.streetAddress,
-          city: selectedAddress.city,
-          state: selectedAddress.state,
-          zipCode: selectedAddress.zipCode,
-          phoneNumber: selectedAddress.phoneNumber,
-        },
-        pricing: {
-          subtotal,
-          shipping,
-          tax,
-          total,
-        },
-        paymentMethod: "COD",
-        paymentStatus: "pending",
-      });
+      orderItems: cartItems.map((item) => ({
+        product: item.product._id,          // ObjectId
+        name: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity,
+        image: item.product.images[0],
+      })),
+      shippingAddress: {
+        fullName: selectedAddress.fullName,
+        streetAddress: selectedAddress.streetAddress,
+        city: selectedAddress.city,
+        state: selectedAddress.state,
+        zipCode: selectedAddress.zipCode,
+        phoneNumber: selectedAddress.phoneNumber,
+      },
+      totalPrice: total,
+      paymentResult: null, // COD
+    });
 
       Alert.alert(
         "Order Placed 🎉",
