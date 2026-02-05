@@ -10,6 +10,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import OrderSummary from "@/components/OrderSummary";
 import AddressSelectionModal from "@/components/AddressSelectionModal";
+import { useRouter } from "expo-router";
+import LoadingState from "@/components/LoadingState";
+import { ErrorState } from "@/components/ErrorState";
+import { EmptyState } from "@/components/EmptyState";
 
 // import * as Sentry from "@sentry/react-native";
 
@@ -56,7 +60,7 @@ const CartScreen = () => {
       },
     ]);
   };
-
+  const router = useRouter();
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
 
@@ -65,7 +69,13 @@ const CartScreen = () => {
       Alert.alert(
         "No Address",
         "Please add a shipping address in your profile before checking out.",
-        [{ text: "OK" }]
+        [
+          {
+            text: "Go to Address",
+            onPress: () => router.push("/(profile)/addresses"), // 👈 change route name if needed
+          },
+          { text: "Cancel", style: "cancel" },
+        ]
       );
       return;
     }
@@ -198,9 +208,9 @@ const CartScreen = () => {
     }
   };
 
-  if (isLoading) return <LoadingUI />;
-  if (isError) return <ErrorUI />;
-  if (cartItems.length === 0) return <EmptyUI />;
+  if (isLoading) return <LoadingState message="Loading Cart..."/>;
+  if (isError) return <ErrorState />;
+  if (cartItems.length === 0) return <EmptyState title="No orders yet" description="You haven’t placed any orders yet." icon="receipt" iconSize={48}/>;
 
   return (
     <SafeScreen>
@@ -297,7 +307,7 @@ const CartScreen = () => {
 
       <View
         className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl border-t
-       border-surface pt-4 pb-32 px-6"
+       border-surface pt-3 pb-24 px-6"
       >
         {/* Quick Stats */}
         <View className="flex-row items-center justify-between mb-4">
@@ -343,41 +353,3 @@ const CartScreen = () => {
 };
 
 export default CartScreen;
-
-function LoadingUI() {
-  return (
-    <View className="flex-1 bg-background items-center justify-center">
-      <ActivityIndicator size="large" color="#00D9FF" />
-      <Text className="text-text-secondary mt-4">Loading cart...</Text>
-    </View>
-  );
-}
-
-function ErrorUI() {
-  return (
-    <View className="flex-1 bg-background items-center justify-center px-6">
-      <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-      <Text className="text-text-primary font-semibold text-xl mt-4">Failed to load cart</Text>
-      <Text className="text-text-secondary text-center mt-2">
-        Please check your connection and try again
-      </Text>
-    </View>
-  );
-}
-
-function EmptyUI() {
-  return (
-    <View className="flex-1 bg-background">
-      <View className="px-6 pt-16 pb-5">
-        <Text className="text-text-primary text-3xl font-bold tracking-tight">Cart</Text>
-      </View>
-      <View className="flex-1 items-center justify-center px-6">
-        <Ionicons name="cart-outline" size={80} color="#666" />
-        <Text className="text-text-primary font-semibold text-xl mt-4">Your cart is empty</Text>
-        <Text className="text-text-secondary text-center mt-2">
-          Add some products to get started
-        </Text>
-      </View>
-    </View>
-  );
-}
