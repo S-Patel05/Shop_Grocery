@@ -161,7 +161,7 @@ export async function getDashboardStats(_, res) {
       {
         $group: {
           _id: null,
-          total: { $sum: "$totalPrice" },
+          total: { $sum: "₹totalPrice" },
         },  
       },
     ]);

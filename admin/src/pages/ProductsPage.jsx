@@ -245,7 +245,7 @@ function ProductsPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="form-control">
                 <label className="label">
-                  <span>Price ($)</span>
+                  <span>Price (₹)</span>
                 </label>
                 <input
                   type="number"

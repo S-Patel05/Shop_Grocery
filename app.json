@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "975be4a3-3462-4b32-bac9-75efd7aa4ac6"
+      }
+    },
+    "android": {
+      "package": "com.sarita1556.ecommercewebsite"
+    }
+  }
+}

@@ -40,7 +40,7 @@ const CartScreen = () => {
 
   const cartItems = cart?.items || [];
   const subtotal = cartTotal;
-  const shipping = 10.0; // $10 shipping fee
+  const shipping = 10.0; // ₹10 shipping fee
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + tax;
 
