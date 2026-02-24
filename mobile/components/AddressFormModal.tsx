@@ -58,7 +58,7 @@ const AddressFormModal = ({
               {isEditing ? "Edit Address" : "Add New Address"}
             </Text>
             <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={28} color="#FFFFFF" />
+              <Ionicons name="close" size={28} />
             </TouchableOpacity>
           </View>
 

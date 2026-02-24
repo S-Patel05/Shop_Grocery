@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { orderApi, statsApi } from "../lib/api.js";
-import { DollarSignIcon, PackageIcon, ShoppingBagIcon, UsersIcon } from "lucide-react";
+import { IndianRupee , PackageIcon, ShoppingBagIcon, UsersIcon } from "lucide-react";
 import { capitalizeText, formatDate, getOrderStatusBadge } from "../lib/utils.js";
 
 function DashboardPage() {
@@ -21,8 +21,8 @@ function DashboardPage() {
   const statsCards = [
     {
       name: "Total Revenue",
-      value: statsLoading ? "..." : `$${statsData?.totalRevenue?.toFixed(2) || 0}`,
-      icon: <DollarSignIcon className="size-8" />,
+      value: statsLoading ? "..." : `₹${statsData?.totalRevenue?.toFixed(2) || 0}`,
+      icon: <IndianRupee className="size-8" />,
     },
     {
       name: "Total Orders",
@@ -103,7 +103,7 @@ function DashboardPage() {
                       </td>
 
                       <td>
-                        <span className="font-semibold">${order.totalPrice.toFixed(2)}</span>
+                        <span className="font-semibold">₹{order.totalPrice.toFixed(2)}</span>
                       </td>
 
                       <td>

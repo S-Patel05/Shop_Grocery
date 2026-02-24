@@ -12,7 +12,20 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
+//Gradient palette (cycling through items)
+const gradients = [
+  ['#ff9a9e', '#fad0c4'],     // soft pink-peach
+  ['#a1c4fd', '#c2e9fb'],     // light blue-sky
+  ['#84fab0', '#8fd3f4'],     // mint-cyan
+  ['#f6d365', '#fda085'],     // warm orange-peach
+  ['#d4fc79', '#96e6a1'],     // lime-green
+]as const;
+
+const getGradientColors = (index: number) => {
+  return gradients[index % gradients.length];
+};
 function OrdersScreen() {
   const { data: orders, isLoading, isError } = useOrders();
   const { createReviewAsync, isCreatingReview } = useReviews();
@@ -69,7 +82,7 @@ function OrdersScreen() {
       {/* Header */}
       <View className="px-6 pb-5 border-b border-surface flex-row items-center">
         <TouchableOpacity onPress={() => router.back()} className="mr-4">
-          <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={28}/>
         </TouchableOpacity>
         <Text className="text-text-primary text-2xl font-bold">My Orders</Text>
       </View>
@@ -90,92 +103,111 @@ function OrdersScreen() {
           contentContainerStyle={{ paddingBottom: 100 }}
         >
           <View className="px-6 py-4">
-            {orders.map((order) => {
-              const totalItems = order.orderItems.reduce((sum, item) => sum + item.quantity, 0);
-              const firstImage = order.orderItems[0]?.image || "";
+            {orders.map((order, index) => {
+  const totalItems = order.orderItems.reduce((sum, item) => sum + item.quantity, 0);
+  const firstImage = order.orderItems[0]?.image || "";
 
-              return (
-                <View key={order._id} className="bg-surface rounded-3xl p-5 mb-4">
-                  <View className="flex-row mb-4">
-                    <View className="relative">
-                      <Image
-                        source={firstImage}
-                        style={{ height: 80, width: 80, borderRadius: 8 }}
-                        contentFit="cover"
-                      />
+  // Get gradient for this card (cycles through your array)
+  const gradientColors = getGradientColors(index);
 
-                      {/* BADGE FOR MORE ITEMS */}
-                      {order.orderItems.length > 1 && (
-                        <View className="absolute -bottom-1 -right-1 bg-primary rounded-full size-7 items-center justify-center">
-                          <Text className="text-background text-xs font-bold">
-                            +{order.orderItems.length - 1}
-                          </Text>
-                        </View>
-                      )}
-                    </View>
+  return (
+    <LinearGradient
+      key={order._id}
+      colors = {gradientColors}
+      style={{
+        borderRadius: 24,           // ≈ rounded-3xl
+        marginBottom: 16,
+        overflow: 'hidden',         // important – prevents inner content overflow
+      }}
+    >
+      {/* Inner content with semi-transparent or solid background if needed */}
+      <View 
+        className="p-5"
+        // Optional: slight overlay to make text more readable
+        style={{ 
+          backgroundColor: 'rgba(255,255,255,0.08)', // very light overlay – adjust or remove
+        }}
+      >
+        <View className="flex-row mb-4">
+          <View className="relative">
+            <Image
+              source={firstImage}
+              style={{ height: 80, width: 80, borderRadius: 8 }}
+              contentFit="cover"
+            />
 
-                    <View className="flex-1 ml-4">
-                      <Text className="text-text-primary font-bold text-base mb-1">
-                        Order #{order._id.slice(-8).toUpperCase()}
-                      </Text>
-                      <Text className="text-text-secondary text-sm mb-2">
-                        {formatDate(order.createdAt)}
-                      </Text>
-                      <View
-                        className="self-start px-3 py-1.5 rounded-full"
-                        style={{ backgroundColor: getStatusColor(order.status) + "20" }}
-                      >
-                        <Text
-                          className="text-xs font-bold"
-                          style={{ color: getStatusColor(order.status) }}
-                        >
-                          {capitalizeFirstLetter(order.status)}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
+            {order.orderItems.length > 1 && (
+              <View className="absolute -bottom-1 -right-1 bg-primary rounded-full size-7 items-center justify-center">
+                <Text className="text-background text-xs font-bold">
+                  +{order.orderItems.length - 1}
+                </Text>
+              </View>
+            )}
+          </View>
 
-                  {/* ORDER ITEMS SUMMARY */}
-                  {order.orderItems.map((item, index) => (
-                    <Text
-                      key={item._id}
-                      className="text-text-secondary text-sm flex-1"
-                      numberOfLines={1}
-                    >
-                      {item.name} × {item.quantity}
-                    </Text>
-                  ))}
+          <View className="flex-1 ml-4">
+            <Text className="text-text-primary font-bold text-base mb-1">
+              Order #{order._id.slice(-8).toUpperCase()}
+            </Text>
+            <Text className="text-text-secondary text-sm mb-2">
+              {formatDate(order.createdAt)}
+            </Text>
+            <View
+              className="self-start px-3 py-1.5 rounded-full"
+              style={{ backgroundColor: getStatusColor(order.status) + "30" }} // slightly stronger opacity
+            >
+              <Text
+                className="text-xs font-bold"
+                style={{ color: getStatusColor(order.status) }}
+              >
+                {capitalizeFirstLetter(order.status)}
+              </Text>
+            </View>
+          </View>
+        </View>
 
-                  <View className="border-t border-background-lighter pt-3 flex-row justify-between items-center">
-                    <View>
-                      <Text className="text-text-secondary text-xs mb-1">{totalItems} items</Text>
-                      <Text className="text-primary font-bold text-xl">
-                        ${order.totalPrice.toFixed(2)}
-                      </Text>
-                    </View>
+        {/* ORDER ITEMS SUMMARY */}
+        {order.orderItems.map((item) => (
+          <Text
+            key={item._id}
+            className="text-text-secondary text-sm mb-1"
+            numberOfLines={1}
+          >
+            {item.name} × {item.quantity}
+          </Text>
+        ))}
 
-                    {order.status === "delivered" &&
-                      (order.hasReviewed ? (
-                        <View className="bg-primary/20 px-5 py-3 rounded-full flex-row items-center">
-                          <Ionicons name="checkmark-circle" size={18} color="#1DB954" />
-                          <Text className="text-primary font-bold text-sm ml-2">Reviewed</Text>
-                        </View>
-                      ) : (
-                        <TouchableOpacity
-                          className="bg-primary px-5 py-3 rounded-full flex-row items-center"
-                          activeOpacity={0.7}
-                          onPress={() => handleOpenRating(order)}
-                        >
-                          <Ionicons name="star" size={18} color="#121212" />
-                          <Text className="text-background font-bold text-sm ml-2">
-                            Leave Rating
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                  </View>
-                </View>
-              );
-            })}
+        <View className="border-t border-white/10 pt-3 flex-row justify-between items-center mt-2">
+          <View>
+            <Text className="text-text-secondary text-xs mb-1">{totalItems} items</Text>
+            <Text className="text-white font-bold text-xl">   {/* changed to white for contrast */}
+              ₹{order.totalPrice.toFixed(2)}
+            </Text>
+          </View>
+
+          {order.status === "delivered" &&
+            (order.hasReviewed ? (
+              <View className="bg-white/20 px-5 py-3 rounded-full flex-row items-center">
+                <Ionicons name="checkmark-circle" size={18} color="#fff" />
+                <Text className="text-white font-bold text-sm ml-2">Reviewed</Text>
+              </View>
+            ) : (
+              <TouchableOpacity
+                className="bg-white/90 px-5 py-3 rounded-full flex-row items-center"
+                activeOpacity={0.8}
+                onPress={() => handleOpenRating(order)}
+              >
+                <Ionicons name="star" size={18} color="#121212" />
+                <Text className="text-black font-bold text-sm ml-2">
+                  Leave Rating
+                </Text>
+              </TouchableOpacity>
+            ))}
+        </View>
+      </View>
+    </LinearGradient>
+  );
+})}
           </View>
         </ScrollView>
       )}

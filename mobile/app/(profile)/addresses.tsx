@@ -132,7 +132,7 @@ function AddressesScreen() {
 
       {addresses.length === 0 ? (
         <View className="flex-1 items-center justify-center px-6">
-          <Ionicons name="location-outline" size={80} color="#fced49" />
+          <Ionicons name="location-outline" size={80} color="#eff59a" />
           <Text className="text-text-primary font-semibold text-xl mt-4">No addresses yet</Text>
           <Text className="text-text-secondary text-center mt-2">
             Add your first delivery address
@@ -152,6 +152,7 @@ function AddressesScreen() {
           contentContainerStyle={{ paddingBottom: 100 }}
         >
           <View className="px-6 py-4">
+
             {addresses.map((address) => (
               <AddressCard
                 key={address._id}
@@ -161,6 +162,7 @@ function AddressesScreen() {
                 isUpdatingAddress={isUpdatingAddress}
                 isDeletingAddress={isDeletingAddress}
               />
+
             ))}
 
             <TouchableOpacity

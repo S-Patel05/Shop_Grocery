@@ -12,6 +12,22 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import LoadingState from "@/components/LoadingState";
+import { ErrorState } from "@/components/ErrorState";
+
+// Gradient palette (cycles through products)
+const gradients = [
+  ["#fa8489", "#fad0c4"], // soft pink-peach
+  ["#a1c4fd", "#c2e9fb"], // light blue-sky
+  ["#84fab0", "#8fd3f4"], // mint-cyan
+  ["#f6d365", "#fda085"], // warm orange-peach
+  ["#d4fc79", "#96e6a1"], // lime-green
+] as const;
+
+const getGradientColors = (index: number) => {
+  return gradients[index % gradients.length];
+};
 
 interface ProductsGridProps {
   isLoading: boolean;
@@ -39,90 +55,86 @@ const ProductsGrid = ({ products, isLoading, isError }: ProductsGridProps) => {
     );
   };
 
-  const renderProduct = ({ item: product }: { item: Product }) => (
-    <TouchableOpacity
-      className="bg-surface rounded-3xl overflow-hidden mb-3"
-      style={{ width: "48%" }}
-      activeOpacity={0.8}
-      onPress={() => router.push(`/product/${product._id}`)}
-    >
-      <View className="relative">
-        <Image
-          source={{ uri: product.images[0] }}
-          className="w-full h-44 bg-background-lighter"
-          resizeMode="cover"
-        />
+  const renderProduct = ({ item: product, index }: { item: Product; index: number }) => {
+    const gradientColors = getGradientColors(index);
 
-        <TouchableOpacity
-          className="absolute top-3 right-3 bg-black/30 backdrop-blur-xl p-2 rounded-full"
-          activeOpacity={0.7}
-          onPress={() => toggleWishlist(product._id)}
-          disabled={isAddingToWishlist || isRemovingFromWishlist}
+    return (
+      <TouchableOpacity
+        className="rounded-3xl overflow-hidden mb-3 shadow-md"
+        style={{ width: "48%" }}
+        activeOpacity={0.8}
+        onPress={() => router.push(`/product/${product._id}`)}
+      >
+        <LinearGradient
+          colors={gradientColors}
+          className="flex-1"
         >
-          {isAddingToWishlist || isRemovingFromWishlist ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
-          ) : (
-            <Ionicons
-              name={isInWishlist(product._id) ? "heart" : "heart-outline"}
-              size={18}
-              color={isInWishlist(product._id) ? "#FF6B6B" : "#FFFFFF"}
+          <View className="relative">
+            <Image
+              source={{ uri: product.images[0] }}
+              className="w-full h-44 bg-background-lighter/30"
+              resizeMode="cover"
             />
-          )}
-        </TouchableOpacity>
-      </View>
 
-      <View className="p-3">
-        <Text className="text-text-secondary text-xs mb-1">{product.category}</Text>
-        <Text className="text-text-primary font-bold text-sm mb-2" numberOfLines={2}>
-          {product.name}
-        </Text>
+            <TouchableOpacity
+              className="absolute top-3 right-3 bg-black/40 p-2 rounded-full border border-white/20"
+              activeOpacity={0.7}
+              onPress={() => toggleWishlist(product._id)}
+              disabled={isAddingToWishlist || isRemovingFromWishlist}
+            >
+              {isAddingToWishlist || isRemovingFromWishlist ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Ionicons
+                  name={isInWishlist(product._id) ? "heart" : "heart-outline"}
+                  size={18}
+                  color={isInWishlist(product._id) ? "#FF6B6B" : "#FFFFFF"}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
 
-        <View className="flex-row items-center mb-2">
-          <Ionicons name="star" size={12} color="#fff707" />
-          <Text className="text-text-primary text-xs font-semibold ml-1">
-            {product.averageRating.toFixed(1)}
-          </Text>
-          <Text className="text-text-secondary text-xs ml-1">({product.totalReviews})</Text>
-        </View>
+          <View className="p-3">
+            <Text className="text-text-primary text-xs mb-1">{product.category}</Text>
+            <Text className="text-text-primary font-bold text-sm mb-2" numberOfLines={2}>
+              {product.name}
+            </Text>
 
-        <View className="flex-row items-center justify-between">
-          <Text className="text-primary font-bold text-lg">${product.price.toFixed(2)}</Text>
+            <View className="flex-row items-center mb-2">
+              <Ionicons name="star" size={12} color="#fff707" />
+              <Text className="text-white text-xs font-semibold ml-1">
+                {product.averageRating.toFixed(1)}
+              </Text>
+              <Text className="text-text-primary text-xs ml-1">({product.totalReviews})</Text>
+            </View>
 
-          <TouchableOpacity
-            className="bg-primary rounded-full w-8 h-8 items-center justify-center"
-            activeOpacity={0.7}
-            onPress={() => handleAddToCart(product._id, product.name)}
-            disabled={isAddingToCart}
-          >
-            {isAddingToCart ? (
-              <ActivityIndicator size="small" color="#121212" />
-            ) : (
-              <Ionicons name="add" size={18} color="#121212" />
-            )}
-          </TouchableOpacity>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+            <View className="flex-row items-center justify-between">
+              <Text className="text-blue font-bold text-lg">
+                ₹{product.price.toFixed(2)}
+              </Text>
 
-  if (isLoading) {
-    return (
-      <View className="py-20 items-center justify-center">
-        <ActivityIndicator size="large" color="#00D9FF" />
-        <Text className="text-text-secondary mt-4">Loading products...</Text>
-      </View>
+              <TouchableOpacity
+                className="bg-white/90 rounded-full w-8 h-8 items-center justify-center"
+                activeOpacity={0.7}
+                onPress={() => handleAddToCart(product._id, product.name)}
+                disabled={isAddingToCart}
+              >
+                {isAddingToCart ? (
+                  <ActivityIndicator size="small" color="#121212" />
+                ) : (
+                  <Ionicons name="add" size={18} color="#121212" />
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
     );
-  }
+  };
 
-  if (isError) {
-    return (
-      <View className="py-20 items-center justify-center">
-        <Ionicons name="alert-circle-outline" size={48} color="#FF6B6B" />
-        <Text className="text-text-primary font-semibold mt-4">Failed to load products</Text>
-        <Text className="text-text-secondary text-sm mt-2">Please try again later</Text>
-      </View>
-    );
-  }
+  if (isLoading) return <LoadingState message="Loading products..." />;
+
+  if (isError) return <ErrorState />;
 
   return (
     <FlatList

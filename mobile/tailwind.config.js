@@ -7,22 +7,22 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#1DB954", // spotify green
-          light: "#1ED760",
-          dark: "#1AA34A",
+          DEFAULT: "#749af2", // spotify green
+          light: "#22C55E",
+          dark: "#22C55E",
         },
         background: {
-          DEFAULT: "#121212", // dark background
+          DEFAULT: "#F2F0EA", // dark background
           light: "#181818",
           lighter: "#282828",
         },
         surface: {
-          DEFAULT: "#282828",
+          DEFAULT: "#f28a8a",
           light: "#3E3E3E",
         },
         text: {
-          primary: "#FFFFFF",
-          secondary: "#B3B3B3",
+          primary: "#000000",
+          secondary: "#000000",
           tertiary: "#6A6A6A",
         },
         accent: {

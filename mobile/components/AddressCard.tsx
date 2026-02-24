@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Address } from "@/types";
-
+import { LinearGradient } from 'expo-linear-gradient';
 interface AddressCardProps {
   address: Address;
   onEdit: (address: Address) => void;
@@ -18,7 +18,11 @@ export default function AddressCard({
   isDeletingAddress,
 }: AddressCardProps) {
   return (
-    <View className="bg-surface rounded-3xl p-5 mb-3">
+    <View >
+      <LinearGradient 
+        colors={['#84fab0', '#8fd3f4']}
+        className="rounded-3xl p-5 mb-3"
+        >
       <View className="flex-row items-center justify-between mb-4">
         <View className="flex-row items-center">
           <View className="bg-primary/20 rounded-full w-12 h-12 items-center justify-center mr-3">
@@ -58,6 +62,7 @@ export default function AddressCard({
           <Text className="text-red-500 font-bold">Delete</Text>
         </TouchableOpacity>
       </View>
+      </LinearGradient>
     </View>
   );
 }
